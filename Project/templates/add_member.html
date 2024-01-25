@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-center items-center bg-gray-100">
+    <div class="bg-white p-8 rounded shadow-md w-3/4">
+        <h1 class="text-2xl mb-4">Add Member</h1>
+        <form method="POST" action="{{ url_for('add_member') }}" onsubmit="return validateForm()">
+            <label for="name" class="block mb-2">Name:</label>
+            <input type="text" name="name" id="name" class="w-full border rounded p-2 mb-2">
+            <span id="name-error" class="text-red-500"></span><br>
+
+            
+
+            <label for="id" class="block mb-2">Student ID:</label>
+            <input type="number" name="id" id="id" class="w-full border rounded p-2 mb-2">
+            <span id="id-error" class="text-red-500"></span><br>
+
+            <label for="password" class="block mb-2">Password:</label>
+            <input name="password" id="password" class="w-full border rounded p-2 mb-2" type="password"/>
+            <span id="password-error" class="text-red-500"></span><br>
+
+            <button type="submit" class="bg-blue-500 text-white rounded p-2">ADD</button>
+        </form>
+    </div>
+</div>
+<script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    function validateForm() {
+        clearValidationMessages();
+    
+        var name = document.getElementById("name").value;
+        
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("password").value;
+    
+        var isValid = true;
+    
+        if (name.trim() === "") {
+            document.getElementById("name-error").textContent = "Name is required.";
+            isValid = false;
+        }
+    
+        if (email.trim() === "") {
+            document.getElementById("email-error").textContent = "Email is required.";
+            isValid = false;
+        
+        }
+    
+        
+    
+        return isValid;
+    }
+    </script>
+    
+{% endblock%}

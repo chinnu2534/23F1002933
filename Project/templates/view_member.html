@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mx-auto mt-10">
+    <h1 class="text-3xl font-semibold mb-4">Member Details</h1>
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">{{ member.name }}</h2>
+        <p class="text-gray-600">{{ member.address }}</p>
+        <p class="text-gray-600">{{ member.phone }}</p>
+        <p class="text-gray-600">{{ member.email }}</p>
+        <!-- Add any other personal information you want to display -->
+        <!-- For example: <p class="text-gray-600">Date of Birth: {{ member.date_of_birth }}</p> -->
+        <!-- Add any other fields from the student model -->
+
+        <!-- Assuming 'debt' is the outstanding debt field in your student model -->
+        <p class="text-gray-600">Total Amount Paid : {{ debt }}</p>
+    </div>
+    <div class="bg-white mt-4 p-6 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Transactions</h2>
+        {% if transactions %}
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2">Id</th>
+                        <th class="border px-4 py-2">Date</th>
+                        <th class="border px-4 py-2">Status</th>
+                        <!-- Add any other transaction-related headers -->
+
+                        <th class="border px-4 py-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td class="border px-4 py-2">{{ transaction.rid }}</td>
+                            <td class="border px-4 py-2">{{ transaction.date }}</td>
+                            <td class="border px-4 py-2">{{ transaction.status }}</td>
+                            <!-- Add any other transaction-related fields -->
+
+                            <td class="py-2 px-4 border border-gray-200">
+                                <a class="ml-2 px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600" href="/returnbook/{{ transaction.rid }}">Manage</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-600">No transactions found for this member.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

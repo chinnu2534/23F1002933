@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Requests</title>
+    <style>
+        body {
+            position: relative;
+            color: white; /* Set text color to white */
+            padding-top: 50px; /* Adjust the padding as needed */
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230526/pngtree-an-old-bookcase-in-a-library-image_2642908.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(15px); /* Adjust the blur level as needed */
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px; /* Adjust the font size as needed */
+        }
+
+        h2 {
+            text-align: center;
+            top: 20px;
+            right: 20px;
+            color: black;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto; /* Center the table */
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid rgb(244, 247, 244); /* Set border color to white */
+        }
+
+        th.header {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Optional: Style the form button */
+        form button {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Highlight pending requests */
+        tbody tr.pending {
+            background-color: #f39c12; /* Adjust the color as needed */
+        }
+    </style>
+</head>
+<body>
+
+<h2>Requests By Students For Books</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>Student ID</th>
+            <th>Book Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rent_object, student, book in rent_objects %}
+            <tr {% if rent_object and rent_object.status == 'Pending' %}class="pending"{% endif %}>
+                <td>{{ rent_object.rid }}</td>
+                <td>{{ student.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('approve_request', rid=rent_object.rid) }}">
+                        <button type="submit">
+                            {% if rent_object and rent_object.status == 'Approved' %}Rented{% else %}Approve{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

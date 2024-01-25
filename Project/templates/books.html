@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mx-auto py-8">
+        <center>
+            <h1 class="text-2xl font-semibold mb-4">Section Wise Books</h1>
+
+            <!-- Add a search input for filtering by author -->
+            <label for="authorSearch">Search by Author:</label>
+            <input type="text" id="authorSearch" oninput="filterBooksByAuthor()" placeholder="Enter author name">
+
+            {% for author, books in books_by_author.items() %}
+                <div class="author-section">
+                    <h2 style="font-weight: bold;">Section of Books written by {{ author }}</h2>
+                    <table class="author-books-table">
+                        <thead>
+                            <tr>
+                                <th>Book Id</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>ISBN</th>
+                                <th>Page</th>
+                                <th>Copies</th>
+                                <th>Publsiher</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                                <tr>
+                                    <td>{{ book.id }}</td>
+                                    <td>{{ book.title }}</td>
+                                    <td>{{ book.author }}</td>
+                                    <td>{{ book.isbn }}</td>
+                                    <td>{{ book.page }}</td>
+                                    <td>{{ book.copies }}</td>
+                                    <td>{{ book.publisher }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+            
+            <<style>
+                #authorSearch {
+                    margin-bottom: 30px;
+                }
+            
+                .author-section {
+                    margin-bottom: 20px;
+                }
+            
+                .author-books-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                }
+            
+                .author-books-table th, .author-books-table td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }
+            
+                .author-books-table th {
+                    background-color: #f2f2f2;
+                }
+            </style>
+
+            <script>
+                function filterBooksByAuthor() {
+                    // Get the search input value
+                    var searchInput = document.getElementById("authorSearch").value.toLowerCase();
+
+                    // Get all author-sections
+                    var authorSections = document.querySelectorAll(".author-section");
+
+                    // Loop through each author-section and show/hide based on search input
+                    authorSections.forEach(function(section) {
+                        var authorName = section.querySelector("h2").innerText.toLowerCase();
+                        var displayStyle = authorName.includes(searchInput) ? "block" : "none";
+                        section.style.display = displayStyle;
+                    });
+                }
+            </script>
+
+        </center>
+    </div>
+{% endblock %}

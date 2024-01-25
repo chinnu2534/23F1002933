@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Dashboard</title>
+
+    <style>
+        body {
+            position: relative;
+            color: white;
+            padding-top: 50px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230526/pngtree-an-old-bookcase-in-a-library-image_2642908.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(5px);
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        .profile-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fff;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            color: #000;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .user-details {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: white;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+        }
+
+        th.header {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        form button {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        .popup-close {
+            cursor: pointer;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-icon" onmouseover="showUserDetails()" onmouseout="hideUserDetails()">👤</div>
+
+    <div id="popup" class="popup">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <p id="popup-message"></p>
+    </div>
+
+    <h1>LIBRARY LOGIN FOR USERS</h1>
+    <h2 class="user-info">Welcome, {{ username }}! <div class="profile-icon" onmouseover="showUserDetails()" onmouseout="hideUserDetails()">👤</div></h2>
+    <div style="position: fixed; top: 20px; left: 90px;">
+        <a href="{{ url_for('profile', user_id=user_id) }}" style="color: white; text-decoration: none; font-size: 18px;">Profile</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="8" class="header">AVAILABLE BOOKS FOR RENT</th>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Publisher</th>
+                <th>Pages</th>
+                <th>Copies</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.page }}</td>
+                    <td>{{ book.copies }}</td>
+                    <td>
+                        <form action="/request" method="post" onsubmit="showPopup()">
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                            <input type="hidden" name="user_id" value="{{ user_id }}">
+                            <button type="submit">Request</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+            </table>
+            <center><h2>READ BOOKS ONLINE</h2></center>
+            <!-- Existing HTML Code... -->
+
+<table>
+    <thead>
+        <tr>
+            <th colspan="3" class="header">APPROVED BOOKS</th>
+        </tr>
+        <tr>
+            <th>RID</th>
+            <th>Title</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in approved_books %}
+            <tr>
+                <td>{{ book.rid }}</td>
+                <td>{{ book.title }}</td>
+                <td>
+                    <!-- "Read Book" button -->
+                    <button onclick="viewBook('{{ book.title }}')">Read Book</button>
+                    
+                    <!-- "Feedback" button -->
+                    <form action="https://forms.gle/dfdT4GmE7t3WyheD7" method="get" target="_blank" style="display: inline;">
+                        <button type="submit">Feedback</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Existing HTML Code... -->
+
+            
+
+    <div id="userDetails" class="user-details">
+        <!-- Details to be displayed when hovering over the icon -->
+        Name: {{ username }}<br>
+        ID: {{ user_id }}<br>
+        Role: Student<br>
+        Bio: Books are the key to change the world
+    </div>
+
+    <div class="popup" id="requestPopup">
+        Book request submitted successfully!
+    </div>
+
+    <div id="bookInfo">
+        <!-- Book information will be displayed here -->
+    </div>
+
+    <form action="/userlogin" method="get">
+        <center><button type="submit">LOG OUT</button></center>
+
+    </form>
+
+    <script>
+        function showUserDetails() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = "block";
+        }
+
+        function hideUserDetails() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = "none";
+        }
+
+        function showPopup() {
+            var popup = document.getElementById("requestPopup");
+            popup.style.display = "block";
+        }
+
+        function closePopup() {
+            var popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+
+        function redirectToProfile() {
+            var userId = {{ user_id }};
+            window.location.href = "/profile/" + userId;
+        }
+
+        function viewBook(title) {
+        // Assuming you have a dictionary title_to_link mapping titles to links
+            var titleToLink = {{ title_to_link | tojson | safe }};
+            var link = titleToLink[title];
+
+            if (link) {
+                window.open(link, '_blank'); // Open link in a new tab
+            } else {
+                alert('Link not available for this book.');
+            }
+        }
+
+        
+
+        $('form').submit(function(event) {
+            event.preventDefault();
+
+            // Perform your AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/request',
+                data: $(this).serialize(),
+                success: function(response) {
+                    openPopup(response.message);
+
+                    // If successful, you may want to update the page content accordingly
+                    if (response.status === 'success') {
+                        // Update page content here
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
